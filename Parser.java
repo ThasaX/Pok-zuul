@@ -2,23 +2,23 @@ import java.util.Scanner;
 
 /**
  * Dieser Parser liest Benutzereingaben und wandelt sie in
- * Befehle für das Adventure-Game um. Bei jedem Aufruf
+ * Befehle fuer das Adventure-Game um. Bei jedem Aufruf
  * liest er eine Zeile von der Konsole und versucht, diese als
- * einen Befehl aus bis zu zwei Wörtern zu interpretieren. Er
- * liefert den Befehl als ein Objekt der Klasse Befehl zurück.
+ * einen Befehl aus bis zu zwei Woertern zu interpretieren. Er
+ * liefert den Befehl als ein Objekt der Klasse Befehl zurueck.
  * 
- * Der Parser verfügt über einen Satz an bekannten Befehlen. Er
+ * Der Parser verfuegt ueber einen Satz an bekannten Befehlen. Er
  * vergleicht die Eingabe mit diesen Befehlen. Wenn die Eingabe
- * keinen bekannten Befehl enthält, dann liefert der Parser ein als 
- * unbekannter Befehl gekennzeichnetes Objekt zurück.
+ * keinen bekannten Befehl enthaelt, dann liefert der Parser ein als 
+ * unbekannter Befehl gekennzeichnetes Objekt zurueck.
  * 
- * @author  Michael Kölling und David J. Barnes
+ * @author  Michael Koelling und David J. Barnes
  * @version 2008.03.30
  */
 class Parser 
 {
-    private Befehlswoerter befehle;  // hält die gültigen Befehlswörter
-    private Scanner leser;         // Lieferant für eingegebene Befehle
+    private Befehlswoerter befehle;  // haelt die gueltigen Befehlswoerter
+    private Scanner leser;         // Lieferant fuer eingegebene Befehle
 
     /**
      * Erzeuge einen Parser, der Befehle von der Konsole einliest.
@@ -30,37 +30,37 @@ class Parser
     }
 
     /**
-     * @return Den nächsten Befehl des Benutzers.
+     * @return Den naechsten Befehl des Benutzers.
      */
     public Befehl liefereBefehl() 
     {
-        String eingabezeile;   // für die gesamte Eingabezeile
-        String wort1 = null;
+        String eingabezeile;   // fuer die gesamte Eingabezeile
+        Befehlswort wort1 = null;
         String wort2 = null;
 
         System.out.print("> ");     // Eingabeaufforderung
 
         eingabezeile = leser.nextLine();
-        
-        // Finde bis zu zwei Wörter in der Zeile
+
+        // Finde bis zu zwei Woerter in der Zeile
         Scanner zerleger = new Scanner(eingabezeile);
         if(zerleger.hasNext()) {
-            wort1 = zerleger.next();     // erstes Wort lesen
+            wort1 = befehle.gibBefehlswort(zerleger.next());
             if (zerleger.hasNext()) {
                 wort2 = zerleger.next();    // zweites Wort lesen
                 // Hinweis: Wir ignorieren den Rest der Eingabezeile.
             }
         }
-        
-        // Jetzt prüfen, ob der Befehl bekannt ist. Wenn ja, erzeugen
+
+        // Jetzt pruefen, ob der Befehl bekannt ist. Wenn ja, erzeugen
         // wir das passende Befehl-Objekt. Wenn nicht, erzeugen wir
         // einen unbekannten Befehl mit 'null'.
-        if(befehle.istBefehl(wort1)) {
-            return new Befehl(wort1, wort2);
-        }
-        else {
-            return new Befehl(null, wort2);
-        }
-    }
 
+        return new Befehl(wort1, wort2);
+    }
+    
+    public void zeigeBefehle()
+    {
+        befehle.alleAusgeben();
+    }
 }

@@ -1,41 +1,49 @@
-/*
- * Diese Klasse hält eine Aufzählung aller Befehlswörter, die dem
- * Spiel bekannt sind. Mit ihrer Hilfe werden eingetippte Befehle
- * erkannt.
- *
- * @author  Michael Kölling und David J. Barnes
- * @version 2008.03.30
- */
+import java.util.HashMap;
+import java.util.Set;
 
 class Befehlswoerter
 {
-    // ein konstantes Array mit den gültigen Befehlswörtern
-    private static final String gueltigeBefehle[] = {
-        "go", "quit", "help", "look"
-    };
+    private HashMap<String, Befehlswort> gueltigeBefehle;
 
-    /**
-     * Konstruktor - initialisiere die Befehlswörter.
-     */
-    public Befehlswoerter()
-    {
-        // nichts zu tun momentan...
+    public Befehlswoerter(){
+        gueltigeBefehle = new HashMap<String, Befehlswort>();
+        gueltigeBefehle.put("QUIT", Befehlswort.QUIT);
+        gueltigeBefehle.put("GO", Befehlswort.GO);
+        gueltigeBefehle.put("TAKE", Befehlswort.TAKE);
+        gueltigeBefehle.put("DROP", Befehlswort.DROP);
+        gueltigeBefehle.put("BACK", Befehlswort.BACK);
+        gueltigeBefehle.put("EAT", Befehlswort.EAT);
+        gueltigeBefehle.put("STATUS", Befehlswort.STATUS);
+        gueltigeBefehle.put("HELP", Befehlswort.HELP);
+        gueltigeBefehle.put("LOOK", Befehlswort.LOOK);
+        gueltigeBefehle.put("BEAM", Befehlswort.BEAM);
+        gueltigeBefehle.put("LOAD", Befehlswort.LOAD);
+        gueltigeBefehle.put("TELEPORT", Befehlswort.TELEPORT);
+        gueltigeBefehle.put("SPEAK", Befehlswort.SPEAK);
     }
 
-    /**
-     * Prüfe, ob eine gegebene Zeichenkette ein gültiger
-     * Befehl ist.
-     * @return 'true', wenn die gegebene Zeichenkette ein gültiger
-     * Befehl ist, 'false' sonst.
-     */
     public boolean istBefehl(String eingabe)
     {
-        for(int i = 0; i < gueltigeBefehle.length; i++) {
-            if(gueltigeBefehle[i].equals(eingabe))
-                return true;
+        boolean exist = false;
+        Befehlswort temp = gueltigeBefehle.get(eingabe);
+        if(temp != null){
+            exist = true;
         }
-        // Wenn wir hierher gelangen, wurde die Eingabe nicht
-        // in den Befehlswörter gefunden.
-        return false;
+        return exist;
+    }
+
+    public void alleAusgeben()
+    {
+        Set<String> keys = gueltigeBefehle.keySet();
+
+        for(String key:keys) {
+            System.out.print(gueltigeBefehle.get(key)+" ");
+        }
+        System.out.println();
+
+    }
+
+    public Befehlswort gibBefehlswort(String wort){
+        return gueltigeBefehle.get(wort);
     }
 }
