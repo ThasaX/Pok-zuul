@@ -45,7 +45,7 @@ class Parser
         // Finde bis zu zwei Woerter in der Zeile
         Scanner zerleger = new Scanner(eingabezeile);
         if(zerleger.hasNext()) {
-            wort1 = befehle.gibBefehlswort(zerleger.next());
+            wort1 = befehle.gibBefehlswort(zerleger.next().toUpperCase());
             if (zerleger.hasNext()) {
                 wort2 = zerleger.next();    // zweites Wort lesen
                 // Hinweis: Wir ignorieren den Rest der Eingabezeile.

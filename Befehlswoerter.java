@@ -12,13 +12,13 @@ class Befehlswoerter
         gueltigeBefehle.put("TAKE", Befehlswort.TAKE);
         gueltigeBefehle.put("DROP", Befehlswort.DROP);
         gueltigeBefehle.put("BACK", Befehlswort.BACK);
-        gueltigeBefehle.put("EAT", Befehlswort.EAT);
+        gueltigeBefehle.put("EQUIP", Befehlswort.EQUIP);
         gueltigeBefehle.put("STATUS", Befehlswort.STATUS);
         gueltigeBefehle.put("HELP", Befehlswort.HELP);
         gueltigeBefehle.put("LOOK", Befehlswort.LOOK);
         gueltigeBefehle.put("BEAM", Befehlswort.BEAM);
         gueltigeBefehle.put("LOAD", Befehlswort.LOAD);
-        gueltigeBefehle.put("TELEPORT", Befehlswort.TELEPORT);
+        gueltigeBefehle.put("USE", Befehlswort.USE);
         gueltigeBefehle.put("SPEAK", Befehlswort.SPEAK);
     }
 

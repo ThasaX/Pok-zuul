@@ -35,7 +35,7 @@ public class Pokemon{
     public int getDef(){
         return def;
     }
-    
+
     public Angriff getAngriff(String angriff){
         return angriffe.get(angriff);
     }
@@ -70,25 +70,26 @@ public class Pokemon{
 
     public void printAngriffe(){
         Set<String> keys = angriffe.keySet();
-        Iterator<String> it = keys.iterator();
 
-        while(it.hasNext()){
-            System.out.println(angriffe.get(it.next()).beschreibung);
+        for(String temp: keys){
+            System.out.println(angriffe.get(temp).beschreibung);
         }
     }
-    
+
     public Angriff getRandomAngriff(){
         Set<String> keys = angriffe.keySet();
         Iterator<String> it = keys.iterator();
         Random r = new Random();
         int n = r.nextInt(angriffe.size());
-        Angriff erg = null;
-        
-        
-        for(int i = 0; i < n; i++){
-            erg = angriffe.get(it.next());
+        Angriff erg = angriffe.get(it.next());
+
+        for(int i = 0; i < n && it.hasNext(); i++){
+            Angriff temp = angriffe.get(it.next());
+            if(temp != null){
+                erg =temp;
+            }
         }
-        
+
         return erg;
     }
 }

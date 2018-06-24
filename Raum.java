@@ -1,6 +1,7 @@
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Random;
+import java.util.Iterator;
 
 class Raum 
 {
@@ -33,6 +34,7 @@ class Raum
             possiblePokemon[0] = rattfratz;
             Pokemon taubsi = new Pokemon("Taubsi", 20, 9, 8);
             taubsi.addAngriff("Windstoss", new Angriff(40, "Windstoss - Schaden: 40, kein Zusatzeffekt", "Windstoss"));
+            possiblePokemon[1] = taubsi;
         }
     }
 
@@ -40,7 +42,7 @@ class Raum
         Random r = new Random();
         return possiblePokemon[r.nextInt(possiblePokemon.length)];
     }
-    
+
     public void setzeAusgaenge(String richtung, Raum nachbar) 
     {
         ausgaenge.put(richtung, nachbar);
@@ -120,5 +122,9 @@ class Raum
 
     public void setHasEncounter(boolean hasEncounter){
         this.hasEncounter = hasEncounter;
+    }
+
+    public void removeAllItems(){
+        gegenstand.clear();
     }
 }

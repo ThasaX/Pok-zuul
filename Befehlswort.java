@@ -16,13 +16,13 @@ public enum Befehlswort{
 
     STATUS("status", "status"),
 
-    EAT("eat", "esse"),
+    EQUIP("equip", "ausrüsten"),
 
     LOAD("load", "laden"),
     
     BEAM("beam","beam"),
     
-    TELEPORT("teleport", "teleport"),
+    USE("use", "benutze"),
     
     SPEAK("speak", "spreche"),
 

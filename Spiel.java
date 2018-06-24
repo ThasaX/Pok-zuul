@@ -25,7 +25,6 @@ class Spiel
     {
         random = new Random();
         map = new HashMap<String, Raum>();
-        raeumeAnlegen();
         letzterRaum = new Stack<Raum>();
         parser = new Parser();
         player = new Spieler("");
@@ -43,45 +42,52 @@ class Spiel
         routeNorth, routeEnd;
 
         // die Raeume erzeugen
-        alabastia = new Raum("in mitten der kleinen Heimatstadt", true, false);
+        alabastia = new Raum("in mitten deiner kleinen Heimatstadt", true, false);
         hausPlayer = new Raum("in deinem zuhause", true, false);
         hausRival = new Raum("in dem Haus von " + nameRival, true, false);
         labor = new Raum("in dem Labor von Professor Eich", true, false);
         see = new Raum("an dem kleinen See von Alabastia", true, false);
         wiese = new Raum("auf einer kleinen Wiese zwischen Alabastia und Route 1 \n Du koenntest auf Pokémon treffen.", false, true);
-        routeSouth = new Raum("auf dem suedlichem Teil von Route 1 \n Du koenntest auf Pokémon und Trainer treffen.", true, true);
-        routeNorth = new Raum("auf dem noerdlichen Teil von Route 1 \n Du koenntest auf Pokémon und Trainer treffen.", true, true);
+        routeSouth = new Raum("auf dem suedlichem Teil von Route 1 \n Du koenntest auf Pokémon treffen.", true, true);
+        routeNorth = new Raum("auf dem noerdlichen Teil von Route 1 \n Du koenntest auf Pokémon treffen.", true, true);
         routeEnd = new Raum("am Ende von Route 1 \n dein Rivale steht vor dir.", true, false);
 
         Person eich = new Person("Eich", "Nimm dir ein Pokemon und fordere " + nameRival + " heraus.\n du kriegst aber nur eines entscheide dich gut.", null);
         labor.setPerson(eich);
-        Gegenstand glumanda = new Gegenstand(100, "Ein Pokemball in dem sich ein Glumanda befindet", "Glumanda");
-        Gegenstand schiggy = new Gegenstand(100, "Ein Pokemball in dem sich ein Bisasam befindet", "Schiggy");
-        Gegenstand bisasam = new Gegenstand(100, "Ein Pokemball in dem sich ein Schiggy befindet", "Bisasam");
+        Gegenstand glumanda = new Gegenstand(100, "Ein Pokemball in dem sich ein Glumanda befindet", "glumanda");
+        Gegenstand schiggy = new Gegenstand(100, "Ein Pokemball in dem sich ein Bisasam befindet", "schiggy");
+        Gegenstand bisasam = new Gegenstand(100, "Ein Pokemball in dem sich ein Schiggy befindet", "bisasam");
         labor.gegenstandHinzufuegen(glumanda);
         labor.gegenstandHinzufuegen(schiggy);
         labor.gegenstandHinzufuegen(bisasam);
 
-        // die Ausgaenge initialisieren
-        alabastia.setzeAusgaenge("Zuhause", hausPlayer);
-        alabastia.setzeAusgaenge("Nachbar", hausRival);
-        alabastia.setzeAusgaenge("Labor", labor);
-        alabastia.setzeAusgaenge("See", see);
-        alabastia.setzeAusgaenge("Wiese", wiese);
-        hausPlayer.setzeAusgaenge("Alabastia", alabastia);
-        hausRival.setzeAusgaenge("Alabastia", alabastia);
-        labor.setzeAusgaenge("Alabastia", alabastia);
-        see.setzeAusgaenge("Alabstia", alabastia);
-        wiese.setzeAusgaenge("Alabastia", alabastia);
-        wiese.setzeAusgaenge("Route Sueden", routeSouth);
-        routeSouth.setzeAusgaenge("Wiese", wiese);
-        routeSouth.setzeAusgaenge("RouteNorden", routeNorth);
-        routeNorth.setzeAusgaenge("RouteSueden", routeSouth);
-        routeNorth.setzeAusgaenge("RouteEnde", routeEnd);
-        routeEnd.setzeAusgaenge("RouteNord", routeNorth);
+        Person mom = new Person("Mutter", "Wenn du angeln gehen willst musst du dir den Rucksack von \n" + nameRival + " zuhause holen.", null);
+        hausPlayer.setPerson(mom);
 
-        hausPlayer.gegenstandHinzufuegen(new Gegenstand(100,"Ein Item, welches man nur am See nutzen kann","Angel"));
-        hausPlayer.gegenstandHinzufuegen(new Gegenstand(100,"",""));
+        Gegenstand rucksack = new Gegenstand(99, "Ein Item welches deine Traglast erhöht", "rucksack");
+        hausRival.gegenstandHinzufuegen(rucksack);        
+        hausPlayer.gegenstandHinzufuegen(new Gegenstand(900,"Ein Item, welches man nur am See nutzen kann","angel"));
+
+        Person rivale = new Person(nameRival, "Hallo " + player.gibName() + "jetzt köönen wir endlich entscheiden wer von uns der bessere ist!", null);
+        routeEnd.setPerson(rivale);
+        
+        // die Ausgaenge initialisieren
+        alabastia.setzeAusgaenge("zuhause", hausPlayer);
+        alabastia.setzeAusgaenge("nachbar", hausRival);
+        alabastia.setzeAusgaenge("labor", labor);
+        alabastia.setzeAusgaenge("see", see);
+        alabastia.setzeAusgaenge("wiese", wiese);
+        hausPlayer.setzeAusgaenge("alabastia", alabastia);
+        hausRival.setzeAusgaenge("alabastia", alabastia);
+        labor.setzeAusgaenge("alabastia", alabastia);
+        see.setzeAusgaenge("alabstia", alabastia);
+        wiese.setzeAusgaenge("alabastia", alabastia);
+        wiese.setzeAusgaenge("north", routeSouth);
+        routeSouth.setzeAusgaenge("wiese", wiese);
+        routeSouth.setzeAusgaenge("north", routeNorth);
+        routeNorth.setzeAusgaenge("south", routeSouth);
+        routeNorth.setzeAusgaenge("north", routeEnd);
+        routeEnd.setzeAusgaenge("south", routeNorth);
 
         map.put("alabastia",alabastia);
         map.put("hausplayer",hausPlayer);
@@ -115,7 +121,7 @@ class Spiel
                     done = true;
                     player.setzeName(temp);
                 }
-            } catch(Exception e){}
+            } catch(Exception e){System.out.println(e);}
         }
 
         done = false;
@@ -128,8 +134,10 @@ class Spiel
                     done = true;
                     nameRival = temp;
                 }
-            } catch(Exception e){}
+            } catch(Exception e){System.out.println(e);}
         }
+
+        raeumeAnlegen();
 
         System.out.println();
         gebeRaumStatus();
@@ -203,7 +211,7 @@ class Spiel
         else if(befehlswort == Befehlswort.STATUS){
             gebeStatus();
         }
-        else if (befehlswort == Befehlswort.EAT)
+        else if (befehlswort == Befehlswort.EQUIP)
         {
             Gegenstand temp = player.gibGegenstand(befehl.gibZweitesWort());
             if(temp == null){
@@ -226,25 +234,30 @@ class Spiel
                 System.out.println("Ihr Beamer hat keinen Raum ausgewaehlt.");
             }
         }
-        else if(befehlswort == Befehlswort.TELEPORT){
-            if(aktuellerRaum == map.get("teleporter")){
-                Set<String> keys = map.keySet();
-                Iterator<String> it = keys.iterator();
-                Random r = new Random();
-                int n = r.nextInt(map.size());
-                Raum temp = null;
-                for(int i = 0; i < n; i++){
-                    temp = map.get(it.next());
+        else if(befehlswort == Befehlswort.USE){
+            if(aktuellerRaum == map.get("see")
+            && befehl.gibZweitesWort().toLowerCase().equals("angel")
+            && player.gibGegenstand("angel") != null){
+                if(player.getPokemon() != null){
+                    Pokemon karpador = new Pokemon("Karpador", 10, 2, 9);
+                    karpador.addAngriff("platscher", new Angriff(0, "Platscher - Schaden: 0, Kein Zusatzeffekt", "Platscher"));
+                    fight(karpador);
+                    System.out.println("Du hast Karpador besiegt.");
                 }
-                beam(temp);
+                else{
+                    System.out.println("Ich darf nicht ohne Pokémon Angeln.");
+                }
+            }
+            else if (!befehl.gibZweitesWort().toLowerCase().equals("Angel")){
+                System.out.println("Das kannst du nicht benutzen");
             }
             else{
-                System.out.println("Es ist kein Teleporter in dem Raum. Meinen sie den ''Beamer''?");
+                System.out.println("Du kannst jetzt nicht angeln");
             }
         }
         else if(befehlswort == Befehlswort.SPEAK){
             if(aktuellerRaum.getPerson() == null){
-                System.out.println("Du fuehrst eine ausgebige Diskussion mit dir selbst. Du verlierst.");
+                System.out.println("Du fuehrst eine ausgebige Diskussion mit dir selbst. Du verlierst. \n Aber weil du ein Guter Verlierer bist, erkennst du deinen Sieg an.");
             }
             else{
                 String text = aktuellerRaum.getPerson().getText();
@@ -253,8 +266,24 @@ class Spiel
                 System.out.print(name + ": ");
                 for(int i = 0; i < n; i++){
                     System.out.print(text.charAt(i));
+                    try{
+                        Thread.sleep(10);
+                    }catch(Exception e){}
                 }
                 System.out.println();
+
+                Pokemon temp = aktuellerRaum.getPerson().getPokemon();
+                if(temp != null){
+                    if(fight(temp)){
+                        System.out.println("Du hast verloren. \n Du rennst nachhause und heilst dein Pokemon.");
+                        beam(map.get("hausplayer"));
+                    }
+                    else{
+                        System.out.println("Glückwunsch! Du hast deinen Rivalen besiegt\n und dieses Spiel somit durchgespielt!");
+                        moechteBeenden = true;
+                    }
+                }
+
             }
         }
         return moechteBeenden;
@@ -269,7 +298,7 @@ class Spiel
      */
     private void hilfstextAusgeben() 
     {
-        System.out.println("Sie haben sich verlaufen. Sie sind allein. \nSie irren auf dem Unigelaende herum. \n \n Ihnen stehen folgende Befehle zur Verfuegung:");
+        System.out.println("Du bist ein junge aus Alabastia der schon seit Kinder Tagen einen Rivalen hat. \n Heute kriegt ihr beiden eure ersten Pokémon und könnt endlich entscheiden wer der bessere ist! \n \n Ihnen stehen folgende Befehle zur Verfuegung:");
         parser.zeigeBefehle();
     }
 
@@ -294,18 +323,22 @@ class Spiel
         }
         else if(befehl.hatZweitesWort()){
 
-            String richtung = befehl.gibZweitesWort();
+            String richtung = befehl.gibZweitesWort().toLowerCase();
             Raum naechsterRaum = aktuellerRaum.gibAusgang(richtung);
 
             if (naechsterRaum == null) {
-                System.out.println("Dort ist keine Tuer!");
+                System.out.println("Dort ist kein Raum!");
             }
             else {
                 if(naechsterRaum.isOpen() || (!naechsterRaum.isOpen() &&  player.getPokemon() != null)){
-                    if(aktuellerRaum.getHasEncounter() && random.nextBoolean()){
-                        if(fight(aktuellerRaum.getRandomEncounter())){
+                    if(aktuellerRaum.getHasEncounter()){
+                        Pokemon enemy = aktuellerRaum.getRandomEncounter();
+                        if(fight(enemy)){
                             System.out.println("Du hast verloren. \n Du rennst nachhause und heilst dein Pokemon.");
-                            naechsterRaum = map.get("zuhause");
+                            beam(map.get("hausPlayer"));
+                        }
+                        else{
+                            System.out.println("Du hast den Kampf gewonnen und gehst weiter!");
                         }
                     }
 
@@ -315,7 +348,7 @@ class Spiel
                     gebeRaumStatus();
                 }        
                 else{
-                    System.out.println("Die Tuer scheint abgeschlossen");
+                    System.out.println("Dort darf ich nur mit einem Pokémon hin");
                 }                
 
             }
@@ -345,30 +378,57 @@ class Spiel
     }
 
     public void takeDropItem(boolean b, String gegenstand){
-        if(b && aktuellerRaum.gibGegenstand(gegenstand) != null){
+        if(b && aktuellerRaum.gibGegenstand(gegenstand.toLowerCase()) != null){
             Gegenstand temp = aktuellerRaum.gibGegenstand(gegenstand);
-            aktuellerRaum.entferneGegenstand(temp);
-            player.addItem(temp);
+            boolean passt = player.addItem(temp);
+            if(passt){
+                aktuellerRaum.entferneGegenstand(temp);
+            }
 
-            if(gegenstand.toLowerCase().equals("glumanda")&&aktuellerRaum.gibGegenstand(gegenstand) != null){
+            if(gegenstand.toLowerCase().equals("glumanda")){
                 Pokemon glumanda = new Pokemon("Glumanda", 19, 10, 8);
                 glumanda.addAngriff("kratzer",new Angriff(40, "Kratzer - Schaden: 40, Kein Zusatzeffekt", "Kratzer"));
                 glumanda.addAngriff("silberblick" ,new Angriff(0, "Silberblick - Schaden: 0, Senkt gegnerische Verteidigung", "Silberblick"));
                 player.setPokemon(glumanda);
+
+                System.out.println("Glückwunsch dein Pokemon ist nun Glumanda!");
+                
+                Pokemon schiggy = new Pokemon("Schiggy", 22, 9, 11);
+                schiggy.addAngriff("tackle",new Angriff(40, "Tackle - Schaden: 40, Kein Zusatzeffekt", "Kratzer"));
+                schiggy.addAngriff("rutenschlag" ,new Angriff(0, "Rutenschlag - Schaden: 0, Senkt gegnerische Verrteidigung", "Silberblick"));
+                map.get("routeEnd").getPerson().setPokemon(schiggy);
+
+                aktuellerRaum.removeAllItems();
             }
-            else if(gegenstand.toLowerCase().equals("schiggy")&&aktuellerRaum.gibGegenstand(gegenstand) != null){
-                Pokemon glumanda = new Pokemon("Schiggy", 22, 9, 11);
-                glumanda.addAngriff("tackle",new Angriff(40, "Tackle - Schaden: 40, Kein Zusatzeffekt", "Kratzer"));
-                glumanda.addAngriff("rutenschlag" ,new Angriff(0, "Rutenschlag - Schaden: 0, Senkt gegnerische Verrteidigung", "Silberblick"));
-                player.setPokemon(glumanda);
+            else if(gegenstand.toLowerCase().equals("schiggy")){
+                Pokemon schiggy = new Pokemon("Schiggy", 22, 9, 11);
+                schiggy.addAngriff("tackle",new Angriff(40, "Tackle - Schaden: 40, Kein Zusatzeffekt", "Kratzer"));
+                schiggy.addAngriff("rutenschlag" ,new Angriff(0, "Rutenschlag - Schaden: 0, Senkt gegnerische Verrteidigung", "Silberblick"));
+                player.setPokemon(schiggy);
+
+                Pokemon bisasam = new Pokemon("Bisasam", 22, 9, 9);
+                bisasam.addAngriff("tackle",new Angriff(40, "Tackle - Schaden: 40, Kein Zusatzeffekt", "Kratzer"));
+                bisasam.addAngriff("heuler" ,new Angriff(0, "Heuler - Schaden: 0, Senkt gegnerischen Angriff", "Heuler"));
+                map.get("routeEnd").getPerson().setPokemon(bisasam);
+                
+                System.out.println("Glückwunsch dein Pokemon ist nun Schiggy!");
+                aktuellerRaum.removeAllItems();
             }
-            else if(gegenstand.toLowerCase().equals("bisasam")&&aktuellerRaum.gibGegenstand(gegenstand) != null){
-                Pokemon glumanda = new Pokemon("Bisasam", 22, 9, 9);
-                glumanda.addAngriff("tackle",new Angriff(40, "Tackle - Schaden: 40, Kein Zusatzeffekt", "Kratzer"));
-                glumanda.addAngriff("heuler" ,new Angriff(0, "Heuler - Schaden: 0, Senkt gegnerischen Angriff", "Heuler"));
-                player.setPokemon(glumanda);
+            else if(gegenstand.toLowerCase().equals("bisasam")){
+                Pokemon bisasam = new Pokemon("Bisasam", 22, 9, 9);
+                bisasam.addAngriff("tackle",new Angriff(40, "Tackle - Schaden: 40, Kein Zusatzeffekt", "Kratzer"));
+                bisasam.addAngriff("heuler" ,new Angriff(0, "Heuler - Schaden: 0, Senkt gegnerischen Angriff", "Heuler"));
+                player.setPokemon(bisasam);
+
+                Pokemon glumanda = new Pokemon("Glumanda", 19, 10, 8);
+                glumanda.addAngriff("kratzer",new Angriff(40, "Kratzer - Schaden: 40, Kein Zusatzeffekt", "Kratzer"));
+                glumanda.addAngriff("silberblick" ,new Angriff(0, "Silberblick - Schaden: 0, Senkt gegnerische Verteidigung", "Silberblick"));
+                map.get("routeEnd").getPerson().setPokemon(glumanda);
+                
+                System.out.println("Glückwunsch dein Pokemon ist nun Bisasam!");
+                aktuellerRaum.removeAllItems();
             }
-            else{
+            else if (passt){
                 System.out.println("Der Gegenstand wurde aufgenommen.");
             }
         }
@@ -384,13 +444,13 @@ class Spiel
     }
 
     public void konsumiereItem(Gegenstand gegenstand){
-        if (player.gibGegenstand("Muffin") == gegenstand){
+        if (player.gibGegenstand("rucksack") == gegenstand){
             player.removeItem(gegenstand);
             player.setzeMaxGewicht(9999);
-            System.out.println("Muffin wurde gegessen.");
+            System.out.println("Rucksack wurde ausgerüstet.");
         }
         else{
-            System.out.println("Dieser Gegenstand kann nicht gegessen werden");
+            System.out.println("Dieser Gegenstand kann nicht ausgerüstet werden");
         }
     }
 
@@ -406,9 +466,6 @@ class Spiel
     }
 
     public void beam(Raum toBeam){
-        if(aktuellerRaum == map.get("kerker")){
-            System.out.println("Sie haben es aus dem Kerker geschafft! Glueckwunsch!");
-        }
         player.setzeaktuellerRaum(toBeam);
         aktuellerRaum = toBeam;
         letzterRaum.clear();
@@ -430,6 +487,8 @@ class Spiel
     }
 
     public boolean fight(Pokemon enemy){
+        System.out.println("Ein kampf hat angefangen");
+
         InputStreamReader isr = new InputStreamReader(System.in);
         BufferedReader reader = new BufferedReader(isr);
 
@@ -455,51 +514,63 @@ class Spiel
                 Angriff gegnerAngriff = enemy.getRandomAngriff();
 
                 if(temp.getDamage() == 0){
-                    if(temp.getName().equals("Silberblick") 
-                    || temp.getName().equals("Rutenschlag")){
+                    if(temp.getName().toLowerCase().equals("silberblick") 
+                    || temp.getName().toLowerCase().equals("rutenschlag")){
                         defEnemy *= 0.75;
+                        System.out.println("Das gegnerische Pokémon hat nun eine gesenkte Verteidigung.");
                     }
-                    else if(temp.getName().equals("Heuler")){
+                    else if(temp.getName().toLowerCase().equals("heuler")){
                         atkEnemy *= 0.75;
+                        System.out.println("Das gegnerische Pokémon hat nun einen gesenkten Angriff.");
                     }
                 }
                 else{
+                    System.out.println("Das gegnerische Pokémon hat schaden bekommen.");
                     enemy.setHPCurrent(enemy.getHPCurrent()-atkPlayer*temp.getDamage()/defEnemy/10);
                 }
 
-                if(enemy.getHPCurrent() ==0){
+                if(enemy.getHPCurrent() <=0){
                     done = true;
                     erg = false;
                 }
 
                 if(gegnerAngriff.getDamage() == 0){
-                    if(gegnerAngriff.getName().equals("Silberblick") 
-                    || gegnerAngriff.getName().equals("Rutenschlag")){
+                    if(gegnerAngriff.getName().toLowerCase().equals("silberblick") 
+                    || gegnerAngriff.getName().toLowerCase().equals("rutenschlag")){
                         defPlayer *= 0.75;
+                        System.out.println("Dein Pokémon hat nun eine gesenkte Verteidigung.");
                     }
-                    else if(gegnerAngriff.getName().equals("Heuler")){
+                    else if(gegnerAngriff.getName().toLowerCase().equals("heuler")){
+                        System.out.println("Dein Pokémon hat nun einen gesenkten Angriff.");
                         atkPlayer *= 0.75;
+                    }
+                    else if(gegnerAngriff.getName().toLowerCase().equals("platscher")){
+                        System.out.println("Gegner setzt Platscher ein... Nichts passiert");
                     }
                 }
                 else{
+                    System.out.println("Dein Pokémon hat schaden bekommen.");
                     player.getPokemon().setHPCurrent(player.getPokemon().getHPCurrent()-atkEnemy*gegnerAngriff.getDamage()/defPlayer/10);
                 }
 
-                if(player.getPokemon().getHPCurrent() ==0){
+                if(player.getPokemon().getHPCurrent() <=0){
                     done = true;
                     erg = true;
                 }
-            }catch(Exception e){}
+            }catch(Exception e){System.out.println(e);}
         }
 
         player.getPokemon().setHPCurrent(player.getPokemon().getHPMax());
-
+        enemy.setHPCurrent(enemy.getHPMax());
+        
+        System.out.println("\n");
+        
         return erg;
     }
 
     public void printFightInformation(Pokemon pokemon, String start){
         System.out.println(start);
         System.out.println("Name: " + pokemon.getName());
-        System.out.println("Leben: " + pokemon.getHPCurrent() + " / " + pokemon.getHPMax());
+        System.out.println("Leben: " + pokemon.getHPCurrent() + " / " + pokemon.getHPMax() + "\n");
     }
 } 

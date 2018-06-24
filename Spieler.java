@@ -75,14 +75,17 @@ public class Spieler
         momentanesGewicht = newGewicht;
     }
 
-    public void addItem(Gegenstand g){
+    public boolean addItem(Gegenstand g){
+        boolean erg = false;
         if(momentanesGewicht+g.gibGewicht() <= maxGewicht){
             inventar.put(g.gibName(),g);
             momentanesGewicht+= g.gibGewicht();
+            erg = true;
         }
         else{
             System.out.println("Der Gegenstand ist zu schwer!");
         }
+        return erg;
     }
 
     public void removeItem(Gegenstand g){
